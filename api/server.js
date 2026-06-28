@@ -1,8 +1,10 @@
-const express = require("express");
+const express = require('express');
 const app = express();
 
-app.get("/", (req, res) => {
-  res.json({ message: "Hello from Express backend!" });
+// Aapke routes
+app.get('/api/server', (req, res) => {
+  res.send('Hello from Express on Vercel!');
 });
 
+// ZAROORI: Express app ko export karein
 module.exports = app;
