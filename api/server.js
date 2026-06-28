@@ -1,10 +1,8 @@
 const express = require("express");
 const app = express();
 
-// Simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Hello Madhav, backend is working!" });
+  res.json({ message: "Hello from Express backend!" });
 });
 
-// Export as serverless function
 module.exports = app;
