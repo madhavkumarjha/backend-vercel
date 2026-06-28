@@ -1,16 +1,36 @@
 const express = require('express');
+const mongoose = require('mongoose');
+
 const app = express();
-const dotenv = require("dotenv");
+app.use(express.json());
 
-dotenv.config();
+// MongoDB Connection URI (Ise Vercel Dashboard mein Environment Variable mein daalein)
+const MONGO_URI = process.env.MONGO_URI;
 
-// Aapke routes
-app.get('/api/server', (req, res) => {
-  res.send('Hello from Express on Vercel!');
+// Connection Cache Variable
+let cachedDb = null;
+
+async function connectToDatabase() {
+  if (cachedDb) return cachedDb;
+  
+  const opts = { bufferCommands: false };
+  const conn = await mongoose.connect(MONGO_URI, opts);
+  cachedDb = conn;
+  return conn;
+}
+
+// Example Route
+app.get('/api/server', async (req, res) => {
+  try {
+    await connectToDatabase();
+    res.status(200).json({ message: "Connected to MongoDB successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: "Could not connect to database" });
+  }
 });
-app.get('/', (req, res) => {
-  res.send(process.env.LINK);
-});
 
-// ZAROORI: Express app ko export karein
+app.get('/',(req,res)=>{
+  res.json("server works fine");
+})
+
 module.exports = app;
