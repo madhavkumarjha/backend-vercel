@@ -1,9 +1,25 @@
 import express from 'express';
 import connectToDatabase from '../config/connectDB.js';
 import config from '../config/config.js';
+import cors from "cors";
+import authRoutes from "../routes/auth.routes.js"
+import { errorHandler } from '../utils/asyncHandlerAndError.js';
 
 const app = express();
 app.use(express.json());
+
+const corsOptions = {
+  origin:
+    process.env.NODE_ENV === "production"
+      ? "https://backend-vercel-two-sand.vercel.app"
+      : ["http://localhost:5173", "https://hoppscotch.io"],
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+app.use(errorHandler)
+
+app.use("/api/auth", authRoutes);
 
 app.get('/api/server', async (req, res) => {
   try {
